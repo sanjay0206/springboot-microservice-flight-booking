@@ -25,7 +25,6 @@ import java.util.UUID;
 @Primary
 public class BookingServiceImpl implements BookingService {
 
-    int count = 1;
     @Autowired
     private BookingRepository bookingRepository;
     @Autowired
