@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @DiscriminatorValue("FLIGHT")
 public class FlightBooking extends Booking {
+
     private String flightNumber;
 }

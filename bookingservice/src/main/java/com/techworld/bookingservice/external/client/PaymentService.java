@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @FeignClient(contextId = "payment", value = "api-gateway", path = "/payment-service/v1/api/payments")
 public interface PaymentService {
     @PostMapping
-    public Long processPayment(PaymentRequest paymentRequest);
+    Long processPayment(PaymentRequest paymentRequest);
 
     default void paymentServiceFallback(Exception e) {
         throw new BookingException("Payment Service is not available", "UNAVAILABLE", 500);

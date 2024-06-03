@@ -1,6 +1,8 @@
 package com.techworld.notificationservice;
 
 import brave.Tracer;
+import io.micrometer.observation.Observation;
+import io.micrometer.observation.ObservationRegistry;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -15,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class NotificationServiceApplication {
 
-
+	private final ObservationRegistry observationRegistry;
 	private final Tracer tracer;
 
 	public static void main(String[] args) {
@@ -24,11 +26,14 @@ public class NotificationServiceApplication {
 
 	@KafkaListener(topics = "notificationTopic")
 	public void handleNotification(BookingCompletedEvent bookingCompletedEvent) {
-		log.info("Got message <{}>", bookingCompletedEvent);
+		Observation.createNotStarted("on-message", this.observationRegistry).observe(() -> {
+			log.info("Got message <{}>", bookingCompletedEvent);
 
-		log.info("TraceId- {}, Received Notification for Booking - {}",
-				tracer.currentSpan().context().traceIdString(),
-				bookingCompletedEvent.getBookingNumber());
-		// send out an email notification
+			log.info("TraceId- {}, Received Notification for Booking - {}",
+					this.tracer.currentSpan().context().traceId(),
+					bookingCompletedEvent.getBookingNumber());
+
+			// send out an email notification
+		});
 	}
 }
