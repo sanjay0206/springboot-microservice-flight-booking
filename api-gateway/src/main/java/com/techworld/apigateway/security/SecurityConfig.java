@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.authorization.ServerAccessDeniedHandler;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -17,30 +18,36 @@ public class SecurityConfig {
     private final JwtAuthConverter jwtAuthConverter;
 
     @Bean
-    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http,
+                                                            CustomAccessDenied accessDenied,
+                                                            CustomAuthenticationEntryPoint authenticationEntryPoint) {
         http
                 .csrf().disable()
                 .authorizeExchange()
 
-                // Public endpoints
+                    // Public endpoints
                     .pathMatchers("/auth/users/**").permitAll()
                     .pathMatchers("/auth/roles/**").permitAll()
 
-                // User role endpoints
+                    // User role endpoints
                     .pathMatchers("/flight-search-service/v1/api/search/**").hasRole(USER)
                     .pathMatchers(HttpMethod.GET, "/flight-service/v1/api/flights/**").hasRole(USER)
                     .pathMatchers(HttpMethod.PUT, "/flight-service/v1/api/flights/**").hasRole(USER)
                     .pathMatchers("/booking-service/v1/api/flights/**").hasRole(USER)
 
-                // Admin role endpoints
+                    // Admin role endpoints
                     .pathMatchers(HttpMethod.POST, "/flight-service/v1/api/flights/**").hasRole(ADMIN)
 
                 // Any other request must be authenticated
                 .anyExchange().authenticated()
                 .and()
-                .oauth2ResourceServer()
-                .jwt()
-                .jwtAuthenticationConverter(jwtAuthConverter);
+                    .exceptionHandling()
+                    .authenticationEntryPoint(authenticationEntryPoint)
+                    .accessDeniedHandler(accessDenied)
+                .and()
+                    .oauth2ResourceServer()
+                    .jwt()
+                    .jwtAuthenticationConverter(jwtAuthConverter);
 
         return http.build();
     }

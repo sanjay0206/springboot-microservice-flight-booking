@@ -24,9 +24,6 @@ public class KeycloakConfig {
 
     @Bean
     public Keycloak keycloak(){
-        System.out.println(adminClientId);
-        System.out.println(adminClientSecret);
-        System.out.println(authServerUrl);
         return KeycloakBuilder.builder()
                 .serverUrl(authServerUrl)
                 .realm(realm)
