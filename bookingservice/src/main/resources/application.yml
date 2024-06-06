@@ -26,7 +26,7 @@ resilience4j:
         max-attempts: 3
         wait-duration: 5s
 
-##Kafka Configuration
+## Kafka Producer Configuration
 spring:
   kafka:
     bootstrap-servers: localhost:9092
@@ -36,4 +36,4 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
-        spring.json.type.mapping: "event:com.techworld.bookingservice.event.BookingCompletedEvent"
+        spring.json.type.mapping: event:com.techworld.bookingservice.event.BookingCompletedEvent

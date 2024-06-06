@@ -1,4 +1,17 @@
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/springboot-flight-booking-realm
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
+jwt:
+  auth:
+    converter:
+      resource-id: booking-auth
+      principle-attribute: peter
+
   cloud:
     gateway:
       routes:
@@ -35,3 +48,12 @@ spring:
           uri: http://localhost:8084
           predicates:
             - Path=/v1/api/payments
+
+keycloak:
+  realm: springboot-flight-booking-realm
+  domain: localhost:8080
+  adminClientId: admin-cli
+  adminClientSecret: qx9Y3TWgoqbitbahJa8AthZyxkZmxdy1
+  clientId: booking-auth
+  urls:
+    auth: http://${keycloak.domain}

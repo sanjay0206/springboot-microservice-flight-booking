@@ -16,6 +16,7 @@ public class CustomFilter implements GlobalFilter {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
         log.info("Request endpoint = " + exchange.getRequest().getPath());
+        log.info("Request header = " + exchange.getRequest().getHeaders());
 
         return chain.filter(exchange).then(Mono.fromRunnable(() -> {
             ServerHttpResponse response = exchange.getResponse();
