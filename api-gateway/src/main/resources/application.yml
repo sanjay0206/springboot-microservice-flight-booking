@@ -9,7 +9,7 @@ spring:
 jwt:
   auth:
     converter:
-      resource-id: booking-auth
+      resource-id: flight-booking-auth
       principle-attribute: peter
 
   cloud:
@@ -54,6 +54,6 @@ keycloak:
   domain: localhost:8080
   adminClientId: admin-cli
   adminClientSecret: qx9Y3TWgoqbitbahJa8AthZyxkZmxdy1
-  clientId: booking-auth
+  clientId: flight-booking-auth
   urls:
     auth: http://${keycloak.domain}

@@ -24,8 +24,9 @@ public class FlightSearchController {
     }
 
     @PostMapping("/indexFlight")
-    public ResponseEntity<FlightSearchResponse> indexFlight(@RequestBody FlightRequest flightRequest) {
-        var flight = flightSearchService.indexFlight(flightRequest);
+    public ResponseEntity<FlightSearchResponse> indexFlight(@RequestParam Long flightId,
+                                                            @RequestBody FlightRequest flightRequest) {
+        var flight = flightSearchService.indexFlight(flightId, flightRequest);
         return new ResponseEntity<>(flight, HttpStatus.CREATED);
     }
 }

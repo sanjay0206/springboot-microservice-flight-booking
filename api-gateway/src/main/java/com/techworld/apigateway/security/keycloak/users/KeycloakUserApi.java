@@ -28,16 +28,4 @@ public class KeycloakUserApi {
         userService.deleteUser(userId);
         return "User Deleted Successfully.";
     }
-
-    @GetMapping(path = "/send-verification-link/{userId}")
-    public String sendVerificationLink(@PathVariable String userId){
-        userService.sendVerificationLink(userId);
-        return "Verification Link Send to Registered E-mail Id.";
-    }
-
-    @PutMapping(path = "/reset-password/{userId}")
-    public String resetPassword(@PathVariable String userId){
-        userService.resetPassword(userId);
-        return "Reset Password Link Send Successfully to Registered E-mail Id.";
-    }
 }

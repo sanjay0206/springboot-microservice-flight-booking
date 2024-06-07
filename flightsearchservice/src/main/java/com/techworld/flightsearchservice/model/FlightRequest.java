@@ -6,7 +6,6 @@ import java.time.LocalDate;
 
 @Builder
 public record FlightRequest(
-        Long flightId,
         String flightNumber,
         String origin,
         String destination,

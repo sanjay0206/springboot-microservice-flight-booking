@@ -17,9 +17,7 @@ public class SecurityConfig {
     private final JwtAuthConverter jwtAuthConverter;
 
     @Bean
-    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http,
-                                                            CustomAccessDenied accessDenied,
-                                                            CustomAuthenticationEntryPoint authenticationEntryPoint) {
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
                 .csrf().disable()
                 .authorizeExchange()
@@ -39,10 +37,6 @@ public class SecurityConfig {
 
                 // Any other request must be authenticated
                 .anyExchange().authenticated()
-                .and()
-                    .exceptionHandling()
-                    .authenticationEntryPoint(authenticationEntryPoint)
-                    .accessDeniedHandler(accessDenied)
                 .and()
                     .oauth2ResourceServer()
                     .jwt()

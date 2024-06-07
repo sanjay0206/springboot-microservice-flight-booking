@@ -67,18 +67,6 @@ public class KeycloakUserServiceImpl implements KeycloakUserService {
         getUsersResource().delete(userId);
     }
 
-    @Override
-    public void resetPassword(String userId) {
-        UserResource userResource = getUserResource(userId);
-        userResource.executeActionsEmail(Collections.singletonList("UPDATE_PASSWORD"));
-    }
-
-    @Override
-    public void sendVerificationLink(String userId) {
-        UsersResource usersResource = getUsersResource();
-        usersResource.get(userId).sendVerifyEmail();
-    }
-
     private CredentialRepresentation createPasswordCredentials(String password) {
         CredentialRepresentation passwordCredentials = new CredentialRepresentation();
         passwordCredentials.setTemporary(false);

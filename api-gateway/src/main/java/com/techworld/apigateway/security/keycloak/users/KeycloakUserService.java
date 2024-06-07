@@ -10,7 +10,5 @@ public interface KeycloakUserService {
     UserRegistrationRecord createUser(UserRegistrationRecord userRegistrationRecord);
     List<UserRepresentation> getUser(String userName);
     void deleteUser(String userId);
-    void sendVerificationLink(String userId);
     UserResource getUserResource(String userId);
-    void resetPassword(String userId);
 }

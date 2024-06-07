@@ -37,10 +37,10 @@ public class FlightSearchServiceImpl implements FlightSearchService {
         return flightSearchResponseList;
     }
 
-    public FlightSearchResponse indexFlight(FlightRequest flightRequest) {
+    public FlightSearchResponse indexFlight(Long flightId, FlightRequest flightRequest) {
 
         Flight flight = Flight.builder()
-                .flightId(flightRequest.flightId())
+                .flightId(flightId)
                 .flightNumber(flightRequest.flightNumber())
                 .origin(flightRequest.origin())
                 .destination(flightRequest.destination())
