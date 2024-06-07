@@ -27,13 +27,13 @@ public class SecurityConfig {
                     .pathMatchers("/auth/roles/**").permitAll()
 
                     // User role endpoints
-                    .pathMatchers("/flight-search-service/v1/api/search/**").hasRole(USER)
+                    .pathMatchers("/flight-search-service/v1/api/search/flights").hasRole(USER)
                     .pathMatchers(HttpMethod.GET, "/flight-service/v1/api/flights/**").hasRole(USER)
-                    .pathMatchers(HttpMethod.PUT, "/flight-service/v1/api/flights/**").hasRole(USER)
-                    .pathMatchers("/booking-service/v1/api/flights/**").hasRole(USER)
+                    .pathMatchers(HttpMethod.PUT, "/flight-service/v1/api/flights/reserveSeats/**").hasRole(USER)
+                    .pathMatchers("/booking-service/v1/api/bookings/**").hasRole(USER)
 
                     // Admin role endpoints
-                    .pathMatchers(HttpMethod.POST, "/flight-service/v1/api/flights/**").hasRole(ADMIN)
+                    .pathMatchers(HttpMethod.POST, "/flight-service/v1/api/flights").hasRole(ADMIN)
 
                 // Any other request must be authenticated
                 .anyExchange().authenticated()
