@@ -37,6 +37,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional(rollbackOn = SQLException.class)
     public String reserveSeats(BookingRequest bookingRequest) {
+
         log.info("create Booking for user {}", bookingRequest.getPassengerName());
 
         // Set the flight booking status as created
@@ -50,6 +51,7 @@ public class BookingServiceImpl implements BookingService {
                 .paymentMode(bookingRequest.getPaymentMode().name())
                 .status(BookingStatus.CREATED.name())
                 .build();
+
         bookingRepository.save(booking);
         log.info("booking status is {} ", booking.getStatus());
 
@@ -62,6 +64,7 @@ public class BookingServiceImpl implements BookingService {
         }
 
         try {
+
             // Do payment
             long paymentId = paymentService.processPayment(getPaymentRequest(booking));
             log.info("Payment service call is success {} with paymentID ", paymentId);
@@ -74,10 +77,12 @@ public class BookingServiceImpl implements BookingService {
             // Send the event using kafka template to notificationTopic
             kafkaTemplate.send("notificationTopic", bookingCompletedEvent);
             log.info("Booking status is {}", booking.getStatus());
+
         } catch (Exception e) {
             log.info("Error in calling payment service for Booking Number {}", booking.getBookingNumber());
             log.error(e.getMessage());
         }
+
         return "Booking Id created Successfully";
     }
 
