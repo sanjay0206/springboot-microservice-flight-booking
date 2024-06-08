@@ -1,0 +1,4 @@
+booking -> 8081
+flight -> 8082
+flight-search -> 8083
+payment - > 8084

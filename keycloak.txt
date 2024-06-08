@@ -1,0 +1,16 @@
+start keycloak server -> kc.bat start-dev --http-port 8080
+
+Keycloak creds:
+user: admin
+pass: admin
+realm: springboot-flight-booking-realm
+
+Client Type: OpenID Connect
+Client ID/ resource id: booking-auth
+client secret: zydotEpRUDJTlylQIyydWnhR8k8gbWaB
+issuer: http://localhost:8080/realms/springboot-flight-booking-realm
+token: http://localhost:8080/realms/springboot-flight-booking-realm/protocol/openid-connect/token
+
+admin serect: qx9Y3TWgoqbitbahJa8AthZyxkZmxdy1
+
+
