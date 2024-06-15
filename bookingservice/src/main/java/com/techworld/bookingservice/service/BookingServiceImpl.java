@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.UUID;
 
 @Slf4j
@@ -34,7 +35,7 @@ public class BookingServiceImpl implements BookingService {
     private KafkaTemplate<String, BookingCompletedEvent> kafkaTemplate;
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional(rollbackOn = SQLException.class)
     public String reserveSeats(BookingRequest bookingRequest) {
 
         log.info("Creating booking for user {}", bookingRequest.getPassengerName());
