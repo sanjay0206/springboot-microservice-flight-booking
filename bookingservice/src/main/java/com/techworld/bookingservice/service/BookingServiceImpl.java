@@ -5,7 +5,7 @@ import com.techworld.bookingservice.entity.BookingStatus;
 import com.techworld.bookingservice.event.BookingCompletedEvent;
 import com.techworld.bookingservice.external.client.FlightService;
 import com.techworld.bookingservice.external.client.PaymentService;
-import com.techworld.bookingservice.external.request.PaymentRequest;
+import com.techworld.bookingservice.model.PaymentRequest;
 import com.techworld.bookingservice.model.BookingRequest;
 import com.techworld.bookingservice.model.BookingResponse;
 import com.techworld.bookingservice.model.PaymentMode;
@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.UUID;
 
 @Slf4j
@@ -35,10 +34,10 @@ public class BookingServiceImpl implements BookingService {
     private KafkaTemplate<String, BookingCompletedEvent> kafkaTemplate;
 
     @Override
-    @Transactional(rollbackOn = SQLException.class)
+    @Transactional(rollbackOn = Exception.class)
     public String reserveSeats(BookingRequest bookingRequest) {
 
-        log.info("create Booking for user {}", bookingRequest.getPassengerName());
+        log.info("Creating booking for user {}", bookingRequest.getPassengerName());
 
         // Set the flight booking status as created
         Booking booking = Booking
@@ -53,7 +52,7 @@ public class BookingServiceImpl implements BookingService {
                 .build();
 
         bookingRepository.save(booking);
-        log.info("booking status is {} ", booking.getStatus());
+        log.info("Booking status is {} ", booking.getStatus());
 
         try {
             flightService.reserveSeats(bookingRequest.getFlightNumber(), bookingRequest.getSeats());
@@ -67,7 +66,7 @@ public class BookingServiceImpl implements BookingService {
 
             // Do payment
             long paymentId = paymentService.processPayment(getPaymentRequest(booking));
-            log.info("Payment service call is success {} with paymentID ", paymentId);
+            log.info("Payment service call is success with paymentID {} ", paymentId);
             booking.setStatus(BookingStatus.CONFIRMED.name());
 
             // Publish booking completed event to Notification Topic

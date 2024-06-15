@@ -1,4 +1,4 @@
-package com.techworld.bookingservice.external.request;
+package com.techworld.bookingservice.model;
 
 import com.techworld.bookingservice.model.PaymentMode;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PaymentRequest {
 
-    private Long bookingId;
+    private long bookingId;
     private double amount;
     private String referenceNumber;
     private PaymentMode paymentMode;

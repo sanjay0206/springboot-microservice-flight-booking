@@ -24,10 +24,12 @@ import java.util.stream.Stream;
 @Log4j2
 public class JwtAuthConverter implements Converter<Jwt, Mono<AbstractAuthenticationToken>> {
     private static final String ROLE_PREFIX = "ROLE_";
+
     private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
 
     @Value("${jwt.auth.converter.principle-attribute}")
     private String principleAttribute;
+
     @Value("${jwt.auth.converter.resource-id}")
     private String resourceId;
 

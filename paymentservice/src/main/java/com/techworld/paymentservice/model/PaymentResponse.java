@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class PaymentResponse {
+
     private long paymentId;
     private String status;
     private PaymentMode paymentMode;

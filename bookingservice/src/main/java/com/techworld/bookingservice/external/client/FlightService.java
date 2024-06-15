@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @CircuitBreaker(name = "external", fallbackMethod = "flightServiceFallback")
-@FeignClient(contextId = "flight", value = "api-gateway", path = "/flight-service/v1/api/flights")
+@FeignClient(contextId = "flight", value = "api-gateway", path = "/flight-service/v1/api/flights", configuration = FeignClientConfig.class)
 public interface FlightService {
     @PutMapping("/reserveSeats/{id}")
     void reserveSeats(@PathVariable("id") String flightNumber, @RequestParam int seats);

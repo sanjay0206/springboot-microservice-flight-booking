@@ -25,6 +25,7 @@ public class PaymentController {
 
     @PostMapping
     public Long processPayment(@RequestBody PaymentRequest paymentRequest) {
+        System.out.println("Reaching here to processPayment");
         return paymentService.processPayment(paymentRequest);
     }
 

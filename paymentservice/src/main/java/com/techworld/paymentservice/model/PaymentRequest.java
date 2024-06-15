@@ -13,8 +13,7 @@ import lombok.NoArgsConstructor;
 public class PaymentRequest {
 
     private long bookingId;
-    private long amount;
+    private double amount;
     private String referenceNumber;
     private PaymentMode paymentMode;
-
 }

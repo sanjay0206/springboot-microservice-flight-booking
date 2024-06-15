@@ -1,4 +1,4 @@
-package com.techworld.bookingservice.external.response;
+package com.techworld.bookingservice.model;
 
 import com.techworld.bookingservice.model.PaymentMode;
 import lombok.AllArgsConstructor;
@@ -13,6 +13,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @Builder
 public class PaymentResponse {
+
     private long paymentId;
     private String status;
     private PaymentMode paymentMode;
