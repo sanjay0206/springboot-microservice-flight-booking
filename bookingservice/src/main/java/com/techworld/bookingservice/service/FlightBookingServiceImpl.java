@@ -28,6 +28,7 @@ public class FlightBookingServiceImpl implements BookingService {
     private final FlightBookingRepository flightBookingRepository;
     private final FlightService flightService;
     private final PaymentService paymentService;
+    private final PaymentUtil paymentUtil;
     private final KafkaTemplate<String, BookingCompletedEvent> kafkaTemplate;
 
     @Override
@@ -49,7 +50,7 @@ public class FlightBookingServiceImpl implements BookingService {
         log.info("Seats are reserved for booking {}", flightBooking.getFlightNumber());
 
         // Do payment
-        long paymentId = paymentService.processPayment(getPaymentRequest(flightBooking));
+        long paymentId = paymentService.processPayment(paymentUtil.getPaymentRequest(flightBooking));
         log.info("Payment service call is success with paymentID {} ", paymentId);
         flightBooking.setStatus(BookingStatus.CONFIRMED.name());
 
@@ -82,15 +83,4 @@ public class FlightBookingServiceImpl implements BookingService {
 
         return flightBooking;
     }
-
-    private PaymentRequest getPaymentRequest(FlightBooking flightBooking) {
-
-        return PaymentRequest.builder()
-                .bookingId(flightBooking.getId())
-                .amount(flightBooking.getAmount())
-                .referenceNumber(flightBooking.getBookingNumber())
-                .paymentMode(PaymentMode.valueOf(flightBooking.getPaymentMode()))
-                .build();
-    }
-
 }
