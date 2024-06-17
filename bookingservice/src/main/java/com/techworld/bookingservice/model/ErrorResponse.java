@@ -1,4 +1,4 @@
-package com.techworld.bookingservice.external.response;
+package com.techworld.bookingservice.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -6,6 +6,7 @@ import com.techworld.flightservice.model.FlightResponse;
 import java.util.List;
 
 public interface FlightService {
+    void indexToFlightSearchService(Long flightId, FlightRequest flightRequest);
 
     FlightResponse createFlight(FlightRequest flightRequest);
 

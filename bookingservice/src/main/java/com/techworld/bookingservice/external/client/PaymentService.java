@@ -1,7 +1,7 @@
 package com.techworld.bookingservice.external.client;
 
 
-import com.techworld.bookingservice.exception.BookingException;
+import com.techworld.bookingservice.exception.BookingServiceException;
 import com.techworld.bookingservice.model.PaymentRequest;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -14,6 +14,6 @@ public interface PaymentService {
     Long processPayment(PaymentRequest paymentRequest);
 
     default Long paymentServiceFallback(Exception e) {
-        throw new BookingException("Payment Service is not available", "UNAVAILABLE", 500);
+        throw new BookingServiceException("Payment Service is not available", "UNAVAILABLE", 500);
     }
 }

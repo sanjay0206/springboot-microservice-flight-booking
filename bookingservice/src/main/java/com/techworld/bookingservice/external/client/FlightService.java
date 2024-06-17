@@ -1,6 +1,6 @@
 package com.techworld.bookingservice.external.client;
 
-import com.techworld.bookingservice.exception.BookingException;
+import com.techworld.bookingservice.exception.BookingServiceException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +14,6 @@ public interface FlightService {
     void reserveSeats(@PathVariable("id") String flightNumber, @RequestParam int seats);
 
     default void flightServiceFallback(Exception e) {
-        throw new BookingException("Flight Service is not available", "UNAVAILABLE", 500);
+        throw new BookingServiceException("Flight Service is not available", "UNAVAILABLE", 500);
     }
 }

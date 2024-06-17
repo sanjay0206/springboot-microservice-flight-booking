@@ -7,6 +7,4 @@ public interface BookingService {
 
     BookingResponse createBooking(BookingRequest bookingRequest);
 
-    String reserveSeats(BookingRequest bookingRequest);
-
 }

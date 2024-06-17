@@ -1,54 +1,45 @@
 package com.techworld.flightservice.service;
 
 import com.techworld.flightservice.entity.Flight;
-import com.techworld.flightservice.exception.FlightServiceCustomException;
+import com.techworld.flightservice.exception.FlightServiceException;
 import com.techworld.flightservice.model.FlightRequest;
 import com.techworld.flightservice.model.FlightResponse;
 import com.techworld.flightservice.repository.FlightRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
+@Log4j2
 public class FlightServiceImpl implements FlightService {
 
-    @Value("${flight-search-service.baseurl}")
-    private String flightSearchServiceBaseurl;
-
     private final FlightRepository flightRepository;
-    private final RestTemplate restTemplate;
+    private final WebClient webClient;
 
-    private void indexToFlightSearchService(Long flightId, FlightRequest flightRequest) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<FlightRequest> requestEntity = new HttpEntity<>(flightRequest, headers);
-        ResponseEntity<String> response = restTemplate.exchange(
-                flightSearchServiceBaseurl + "?flightId=" + flightId,
-                HttpMethod.POST,
-                requestEntity,
-                String.class
-        );
-
-        log.info("Flight Number {} is indexed to flight search service {}",
-                flightRequest.flightNumber(), response.getBody());
+    @Override
+    public void indexToFlightSearchService(Long flightId, FlightRequest flightRequest) {
+        webClient.post()
+                .uri(uriBuilder -> uriBuilder.queryParam("flightId", flightId).build())
+                .bodyValue(flightRequest)
+                .retrieve()
+                .bodyToMono(String.class)
+                .doOnSuccess(response ->
+                        log.info("Flight Number {} is indexed to flight search service {}",
+                                flightRequest.flightNumber(), response))
+                .doOnError(e ->
+                        log.error("Error while indexing flight number {} to flight search service: {}",
+                                flightRequest.flightNumber(), e.getMessage()))
+                .block();  // Blocking here to ensure the method waits for the response
     }
+
 
     @Override
     @Transactional(rollbackOn = SQLException.class)
@@ -68,14 +59,8 @@ public class FlightServiceImpl implements FlightService {
         Flight savedFlight = flightRepository.save(flight);
         log.info("savedFlight {}", savedFlight);
 
-        // Attempt to index flight to flight search service in MongoDB
-        try {
-            indexToFlightSearchService(savedFlight.getFlightId(), flightRequest);
-        } catch (FlightServiceCustomException | RestClientException e) {
-            throw new FlightServiceCustomException(
-                    "Error while indexing flight number " + flightRequest.flightNumber() + " to flight search service",
-                    e.getLocalizedMessage());
-        }
+        // Index flight to flight search service in MongoDB
+        indexToFlightSearchService(savedFlight.getFlightId(), flightRequest);
 
         FlightResponse flightResponse = new FlightResponse();
         BeanUtils.copyProperties(flight, flightResponse);
@@ -101,7 +86,7 @@ public class FlightServiceImpl implements FlightService {
         log.info("Get the flight for flight Number: {}", flightNumber);
         Flight optionalFlight = flightRepository.findByFlightNumber(flightNumber)
                 .orElseThrow(
-                        () -> new FlightServiceCustomException("Flight with given number not found", "FLIGHT_NOT_FOUND"));
+                        () -> new FlightServiceException("Flight with given number not found", "FLIGHT_NOT_FOUND"));
 
         FlightResponse flightResponse = new FlightResponse();
 
@@ -121,10 +106,10 @@ public class FlightServiceImpl implements FlightService {
         log.info("Reserve seats {} for flight Number: {}", seats, flightNumber);
 
         Flight flight = flightRepository.findByFlightNumber(flightNumber)
-                .orElseThrow(() -> new FlightServiceCustomException("Flight with given id not found", "FLIGHT_NOT_FOUND"));
+                .orElseThrow(() -> new FlightServiceException("Flight with given id not found", "FLIGHT_NOT_FOUND"));
 
         if (flight.getTotalSeats() < seats) {
-            throw new FlightServiceCustomException("Flights does not have sufficient seats", "INSUFFICIENT_SEATS");
+            throw new FlightServiceException("Flights does not have sufficient seats", "INSUFFICIENT_SEATS");
         }
 
         int totalSeats = flight.getTotalSeats() - seats;

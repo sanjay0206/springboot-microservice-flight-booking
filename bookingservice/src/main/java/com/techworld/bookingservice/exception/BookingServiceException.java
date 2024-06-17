@@ -5,12 +5,12 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class BookingException extends RuntimeException {
+public class BookingServiceException extends RuntimeException {
 
     private String errorCode;
     private int status;
 
-    public BookingException(String message, String errorCode, int status) {
+    public BookingServiceException(String message, String errorCode, int status) {
         super(message);
         this.errorCode = errorCode;
         this.status = status;

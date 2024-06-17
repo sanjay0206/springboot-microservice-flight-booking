@@ -1,6 +1,5 @@
 package com.techworld.bookingservice.model;
 
-import com.techworld.bookingservice.model.PaymentMode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

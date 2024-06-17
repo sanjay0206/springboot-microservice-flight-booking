@@ -3,11 +3,11 @@ package com.techworld.bookingservice.service;
 import com.techworld.bookingservice.entity.BookingStatus;
 import com.techworld.bookingservice.entity.HotelBooking;
 import com.techworld.bookingservice.model.BookingRequest;
-import com.techworld.bookingservice.model.BookingResponse;
 import com.techworld.bookingservice.model.HotelBookingRequest;
 import com.techworld.bookingservice.model.HotelBookingResponse;
 import com.techworld.bookingservice.repository.HotelBookingRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -18,13 +18,14 @@ import java.util.UUID;
 @Service
 @Qualifier("hotelBookingService")
 @RequiredArgsConstructor
-public class HotelBookingService implements BookingService {
+@Log4j2
+public class HotelBookingServiceImpl implements BookingService {
 
     private final HotelBookingRepository hotelBookingRepository;
 
     @Override
-    public BookingResponse createBooking(BookingRequest bookingRequest) {
-
+    public HotelBookingResponse createBooking(BookingRequest bookingRequest) {
+        log.info("bookingRequest: " + bookingRequest);
         if (!(bookingRequest instanceof HotelBookingRequest)) {
             throw new IllegalArgumentException("Invalid booking type");
         }
@@ -58,12 +59,6 @@ public class HotelBookingService implements BookingService {
         hotelBooking.setCheckOutDate(hotelBookingRequest.getCheckOutDate());
 
         return hotelBooking;
-    }
-
-    @Override
-    public String reserveSeats(BookingRequest bookingRequest) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'reserveBooking'");
     }
 
 }

@@ -1,17 +1,12 @@
 package com.techworld.paymentservice.entity;
 
-import java.time.Instant;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Table;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.Instant;
 
 @Entity
 @Table(name = "PAYMENT_DETAILS")
@@ -25,7 +20,7 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long paymentId;
     private long bookingId;
-    private long amount;
+    private double amount;
 
     @Column(name = "MODE")
     private String paymentMode;

@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class FlightControllerExceptionHandler extends ResponseEntityExceptionHandler {
+public class FlightGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     // handle specific exception
-    @ExceptionHandler(FlightServiceCustomException.class)
-    public ResponseEntity<ErrorResponse> handleFlightServiceException(FlightServiceCustomException exception) {
+    @ExceptionHandler(FlightServiceException.class)
+    public ResponseEntity<ErrorResponse> handleFlightServiceException(FlightServiceException exception) {
 
         return new ResponseEntity<>(ErrorResponse.builder()
                 .errorCode(exception.getErrorCode())

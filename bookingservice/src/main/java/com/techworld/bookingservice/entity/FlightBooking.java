@@ -14,4 +14,5 @@ import lombok.NoArgsConstructor;
 public class FlightBooking extends Booking {
 
     private String flightNumber;
+    private int seats;
 }

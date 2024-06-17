@@ -1,5 +1,6 @@
 package com.techworld.apigateway.security;
 
+import com.techworld.apigateway.security.keycloak.roles.Role;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +21,6 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class SecurityConfig {
     Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
-    private static final String ADMIN = "admin";
-    private static final String USER = "user";
     private final JwtAuthConverter jwtAuthConverter;
 
     @Bean
@@ -38,13 +37,13 @@ public class SecurityConfig {
                     .pathMatchers("/auth/roles/**").permitAll()
 
                     // User role endpoints
-                    .pathMatchers("/flight-search-service/v1/api/search/flights").hasRole(USER)
-                    .pathMatchers(HttpMethod.GET, "/flight-service/v1/api/flights/**").hasRole(USER)
-                    .pathMatchers(HttpMethod.PUT, "/flight-service/v1/api/flights/reserveSeats/**").hasRole(USER)
-                    .pathMatchers("/booking-service/v1/api/bookings/**").hasRole(USER)
+                    .pathMatchers("/flight-search-service/v1/api/search/flights").hasRole(Role.USER.getRole())
+                    .pathMatchers(HttpMethod.GET, "/flight-service/v1/api/flights/**").hasRole(Role.USER.getRole())
+                    .pathMatchers(HttpMethod.PUT, "/flight-service/v1/api/flights/reserveSeats/**").hasRole(Role.USER.getRole())
+                    .pathMatchers(HttpMethod.POST, "/booking-service/v1/api/bookings/**").hasRole(Role.USER.getRole())
 
                     // Admin role endpoints
-                    .pathMatchers(HttpMethod.POST, "/flight-service/v1/api/flights").hasRole(ADMIN)
+                    .pathMatchers(HttpMethod.POST, "/flight-service/v1/api/flights").hasRole(Role.ADMIN.getRole())
 
                 // Any other request must be authenticated
                 .anyExchange().authenticated()
