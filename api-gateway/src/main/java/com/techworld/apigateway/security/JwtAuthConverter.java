@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,12 +36,9 @@ public class JwtAuthConverter implements Converter<Jwt, Mono<AbstractAuthenticat
 
     @Override
     public Mono<AbstractAuthenticationToken> convert(@NonNull Jwt jwt) {
-        Collection<GrantedAuthority> authorities = Stream.concat(
-                jwtGrantedAuthoritiesConverter.convert(jwt).stream(),
-                extractResourceRoles(jwt).stream())
-                .collect(Collectors.toSet());
-
+        Collection<GrantedAuthority> authorities = new HashSet<>(extractResourceRoles(jwt));
         log.info("authorities: " + authorities);
+
         return Mono.just(new JwtAuthenticationToken(jwt, authorities, getPrincipleClaimName(jwt)));
     }
 
