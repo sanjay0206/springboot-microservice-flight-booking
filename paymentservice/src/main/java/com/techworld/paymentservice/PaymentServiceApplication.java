@@ -10,5 +10,4 @@ public class PaymentServiceApplication {
 		SpringApplication.run(PaymentServiceApplication.class, args);
 		System.out.println("PaymentServiceApplication is running...");
 	}
-
 }

@@ -8,12 +8,15 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @CircuitBreaker(name = "external", fallbackMethod = "paymentServiceFallback")
-@FeignClient(contextId = "payment", value = "api-gateway", path = "/payment-service/v1/api/payments", configuration = FeignClientConfig.class)
+@FeignClient(contextId = "payment",
+        name = "payment-service",
+        path = "/v1/api/payments",
+        configuration = FeignClientConfig.class)
 public interface PaymentService {
     @PostMapping
     Long processPayment(PaymentRequest paymentRequest);
 
-    default Long paymentServiceFallback(Exception e) {
-        throw new BookingServiceException("Payment Service is not available", "UNAVAILABLE", 500);
+    default Long paymentServiceFallback(PaymentRequest paymentRequest, Throwable t) {
+        throw new BookingServiceException("Payment Service is not available", "UNAVAILABLE", 503);
     }
 }

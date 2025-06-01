@@ -1,5 +1,7 @@
-package com.techworld.apigateway.security.keycloak.users;
+package com.techworld.apigateway.security.keycloak.controller;
 
+import com.techworld.apigateway.security.keycloak.model.UserRegistrationRecord;
+import com.techworld.apigateway.security.keycloak.service.KeycloakUserService;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/auth/users")
 @RequiredArgsConstructor
-public class KeycloakUserApi {
+public class KeycloakUserController {
 
     private final KeycloakUserService userService;
 

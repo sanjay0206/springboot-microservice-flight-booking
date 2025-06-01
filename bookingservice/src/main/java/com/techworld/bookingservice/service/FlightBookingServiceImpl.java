@@ -34,8 +34,8 @@ public class FlightBookingServiceImpl implements BookingService {
     @Override
     @Transactional(rollbackOn = SQLException.class)
     public FlightBookingResponse createBooking(BookingRequest bookingRequest) {
+        log.info("bookingRequest: {}", bookingRequest);
 
-        log.info("bookingRequest: " + bookingRequest);
         if (!(bookingRequest instanceof FlightBookingRequest)) {
             throw new IllegalArgumentException("Invalid booking type");
         }
@@ -54,12 +54,12 @@ public class FlightBookingServiceImpl implements BookingService {
         log.info("Payment service call is success with paymentID {} ", paymentId);
         flightBooking.setStatus(BookingStatus.CONFIRMED.name());
 
-        // Publish booking completed event to Notification Topic
-        BookingCompletedEvent bookingCompletedEvent = new BookingCompletedEvent(flightBooking.getBookingNumber());
-        log.info("Sending event to notificationTopic with event {}", bookingCompletedEvent);
-
-        // Send the event using kafka template to notificationTopic
-        kafkaTemplate.send("notificationTopic", bookingCompletedEvent);
+//        // Publish booking completed event to Notification Topic
+//        BookingCompletedEvent bookingCompletedEvent = new BookingCompletedEvent(flightBooking.getBookingNumber());
+//        log.info("Sending event to notificationTopic with event {}", bookingCompletedEvent);
+//
+//        // Send the event using kafka template to notificationTopic
+//        kafkaTemplate.send("notificationTopic", bookingCompletedEvent);
 
         log.info("Flight {} is booked with booking ID: {}", flightBooking.getFlightNumber(), flightBooking.getBookingNumber());
         FlightBookingResponse flightBookingResponse = new FlightBookingResponse();

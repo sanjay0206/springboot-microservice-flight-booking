@@ -10,7 +10,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimNames;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
@@ -19,14 +18,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 @Log4j2
 public class JwtAuthConverter implements Converter<Jwt, Mono<AbstractAuthenticationToken>> {
-    private static final String ROLE_PREFIX = "ROLE_";
 
-    private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+    private static final String ROLE_PREFIX = "ROLE_";
 
     @Value("${jwt.auth.converter.principle-attribute}")
     private String principleAttribute;
@@ -37,7 +34,7 @@ public class JwtAuthConverter implements Converter<Jwt, Mono<AbstractAuthenticat
     @Override
     public Mono<AbstractAuthenticationToken> convert(@NonNull Jwt jwt) {
         Collection<GrantedAuthority> authorities = new HashSet<>(extractResourceRoles(jwt));
-        log.info("authorities: " + authorities);
+        log.info("authorities: {}", authorities);
 
         return Mono.just(new JwtAuthenticationToken(jwt, authorities, getPrincipleClaimName(jwt)));
     }
@@ -47,7 +44,8 @@ public class JwtAuthConverter implements Converter<Jwt, Mono<AbstractAuthenticat
         if (principleAttribute != null) {
             claimName = principleAttribute;
         }
-        log.info("claimName: " + claimName);
+
+        log.info("claimName: {}", claimName);
         return jwt.getClaim(claimName);
     }
 

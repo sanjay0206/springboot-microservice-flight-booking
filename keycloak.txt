@@ -12,5 +12,3 @@ issuer: http://localhost:8080/realms/springboot-flight-booking-realm
 token: http://localhost:8080/realms/springboot-flight-booking-realm/protocol/openid-connect/token
 
 admin serect: qx9Y3TWgoqbitbahJa8AthZyxkZmxdy1
-
-

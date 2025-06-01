@@ -1,5 +1,6 @@
-package com.techworld.apigateway.security.keycloak.roles;
+package com.techworld.apigateway.security.keycloak.service;
 
+import com.techworld.apigateway.security.keycloak.model.RoleRegistrationRecord;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.*;
@@ -14,8 +15,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class KeycloakRoleServiceImpl implements KeyCloakRoleService {
+
     @Value("${keycloak.realm}")
     private String realm;
+
     @Value("${keycloak.clientId}")
     private String clientId;
 

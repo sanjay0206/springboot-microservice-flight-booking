@@ -6,5 +6,4 @@ import com.techworld.bookingservice.model.BookingResponse;
 public interface BookingService {
 
     BookingResponse createBooking(BookingRequest bookingRequest);
-
 }

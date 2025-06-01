@@ -1,75 +1,47 @@
 package com.techworld.apigateway.security;
 
-import com.techworld.apigateway.security.keycloak.roles.Role;
+import com.techworld.apigateway.security.keycloak.model.Role;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
-import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher;
-import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
 
 @Configuration
 @EnableWebFluxSecurity
 @RequiredArgsConstructor
+@Log4j2
 public class SecurityConfig {
-    Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
+
     private final JwtAuthConverter jwtAuthConverter;
 
+    @Order(Ordered.HIGHEST_PRECEDENCE + 1)
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
-                .csrf().disable()
-                .securityContextRepository(NoOpServerSecurityContextRepository.getInstance()) // Emulate SessionCreationPolicy.STATELESS
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
 
-                .authorizeExchange()
-                .matchers(this::internalCall).permitAll() // Skip authentication for internal API Calls
-
-                    // Public endpoints
-                    .pathMatchers("/auth/users/**").permitAll()
-                    .pathMatchers("/auth/roles/**").permitAll()
-
-                    // User role endpoints
-                    .pathMatchers("/flight-search-service/v1/api/search/flights").hasRole(Role.USER.getRole())
-                    .pathMatchers(HttpMethod.GET, "/flight-service/v1/api/flights/**").hasRole(Role.USER.getRole())
-                    .pathMatchers(HttpMethod.PUT, "/flight-service/v1/api/flights/reserveSeats/**").hasRole(Role.USER.getRole())
-                    .pathMatchers(HttpMethod.POST, "/booking-service/v1/api/bookings/**").hasRole(Role.USER.getRole())
-
-                    // Admin role endpoints
-                    .pathMatchers(HttpMethod.POST, "/flight-service/v1/api/flights").hasRole(Role.ADMIN.getRole())
-
-                // Any other request must be authenticated
-                .anyExchange().authenticated()
-                .and()
-                    .oauth2ResourceServer()
-                    .jwt()
-                    .jwtAuthenticationConverter(jwtAuthConverter);
+                .authorizeExchange(exchanges -> exchanges
+                        .pathMatchers("/auth/users/**").permitAll()
+                        .pathMatchers("/auth/roles/**").permitAll()
+                        .pathMatchers("/flight-search-service/v1/api/search/flights").hasRole(Role.USER.getRole())
+                        .pathMatchers(HttpMethod.GET, "/flight-service/v1/api/flights/**").hasRole(Role.USER.getRole())
+                        .pathMatchers(HttpMethod.PUT, "/flight-service/v1/api/flights/reserveSeats/**").hasRole(Role.USER.getRole())
+                        .pathMatchers(HttpMethod.POST, "/booking-service/v1/api/bookings/**").hasRole(Role.USER.getRole())
+                        .pathMatchers(HttpMethod.POST, "/flight-service/v1/api/flights").hasRole(Role.ADMIN.getRole())
+                        .anyExchange().authenticated()
+                )
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter))
+                );
 
         return http.build();
-    }
-
-    private Mono<ServerWebExchangeMatcher.MatchResult> internalCall(ServerWebExchange exchange) {
-        logger.info("Inside internalCall");
-
-        exchange.getRequest().getHeaders()
-                .forEach((key, value) -> logger.info(key + "= " + value));
-
-        // Check if the X-Internal-Request header has the value "Internal"
-        HttpHeaders headers = exchange.getRequest().getHeaders();
-        if (headers.containsKey("X-Internal-Request")) {
-            if ("Internal".equalsIgnoreCase(headers.getFirst("X-Internal-Request"))) {
-                return ServerWebExchangeMatcher.MatchResult.match();
-            }
-        }
-
-        // Default to not match if the header is not present or does not have the expected value
-        return ServerWebExchangeMatcher.MatchResult.notMatch();
     }
 }

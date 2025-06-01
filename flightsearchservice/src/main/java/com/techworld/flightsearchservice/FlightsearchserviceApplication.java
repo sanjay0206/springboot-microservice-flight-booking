@@ -24,7 +24,7 @@ public class FlightsearchserviceApplication {
     CommandLineRunner commandLineRunner(FlightSearchRepository flightSearchRepository) {
         return args -> {
 
-            // Remove existing flights (optional)
+            // Remove existing flights
             flightSearchRepository.deleteAll();
 
             // Create sample flights
@@ -37,7 +37,6 @@ public class FlightsearchserviceApplication {
 
             // Save flights to the database
             flightSearchRepository.saveAll(Arrays.asList(flight1, flight2, flight3));
-
         };
     }
 }

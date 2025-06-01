@@ -14,5 +14,4 @@ public class BookingserviceApplication {
         SpringApplication.run(BookingserviceApplication.class, args);
         System.out.println("BookingserviceApplication is running...");
     }
-
 }

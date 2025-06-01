@@ -8,5 +8,4 @@ import org.springframework.stereotype.Repository;
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
     Payment findByBookingId(Long bookingId);
-
 }

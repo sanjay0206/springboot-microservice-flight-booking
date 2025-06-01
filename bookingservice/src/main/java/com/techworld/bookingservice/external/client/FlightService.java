@@ -8,12 +8,18 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @CircuitBreaker(name = "external", fallbackMethod = "flightServiceFallback")
-@FeignClient(contextId = "flight", value = "api-gateway", path = "/flight-service/v1/api/flights", configuration = FeignClientConfig.class)
+@FeignClient(contextId = "flight",
+        name = "flight-service",
+        path = "/v1/api/flights",
+        configuration = FeignClientConfig.class)
 public interface FlightService {
+
     @PutMapping("/reserveSeats/{id}")
     void reserveSeats(@PathVariable("id") String flightNumber, @RequestParam int seats);
 
-    default void flightServiceFallback(Exception e) {
-        throw new BookingServiceException("Flight Service is not available", "UNAVAILABLE", 500);
+    default void flightServiceFallback(String flightNumber, int seats, Throwable t) {
+        System.out.println("check error: " + t.getMessage());
+        throw new BookingServiceException("Flight Service is not available", "UNAVAILABLE", 503);
     }
 }
+

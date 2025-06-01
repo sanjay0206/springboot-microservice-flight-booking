@@ -60,7 +60,6 @@ public class FlightSearchServiceImpl implements FlightSearchService {
         return flightSearchResponse;
     }
 
-
     private FlightSearchResponse mapToFlightSearchResponse(Flight flight) {
         FlightSearchResponse flightSearchResponse = new FlightSearchResponse();
         BeanUtils.copyProperties(flight, flightSearchResponse);

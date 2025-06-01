@@ -1,4 +1,4 @@
-package com.techworld.apigateway.security.keycloak.roles;
+package com.techworld.apigateway.security.keycloak.model;
 
 public record RoleRegistrationRecord(String roleName, String description) {
 }

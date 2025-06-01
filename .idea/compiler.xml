@@ -11,8 +11,8 @@
         <module name="bookingservice" />
         <module name="api-gateway" />
         <module name="flightservice" />
-        <module name="flightsearchservice" />
         <module name="paymentservice" />
+        <module name="flightsearchservice" />
         <module name="notificationservice" />
       </profile>
     </annotationProcessing>

@@ -4,6 +4,7 @@ package com.techworld.paymentservice.controller;
 import com.techworld.paymentservice.model.PaymentRequest;
 import com.techworld.paymentservice.model.PaymentResponse;
 import com.techworld.paymentservice.service.PaymentService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1/api/payments")
+@RequiredArgsConstructor
 public class PaymentController {
 
-    @Autowired
-    private PaymentService paymentService;
+    private final PaymentService paymentService;
 
     @PostMapping
     public Long processPayment(@RequestBody PaymentRequest paymentRequest) {

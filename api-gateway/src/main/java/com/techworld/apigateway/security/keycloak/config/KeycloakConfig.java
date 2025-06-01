@@ -1,4 +1,4 @@
-package com.techworld.apigateway.security.keycloak;
+package com.techworld.apigateway.security.keycloak.config;
 
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;

@@ -29,5 +29,4 @@ public class FlightGlobalExceptionHandler extends ResponseEntityExceptionHandler
                 .errorMessage(exception.getMessage())
                 .build(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 }

@@ -1,12 +1,14 @@
-package com.techworld.apigateway.security.keycloak.roles;
+package com.techworld.apigateway.security.keycloak.controller;
 
+import com.techworld.apigateway.security.keycloak.model.RoleRegistrationRecord;
+import com.techworld.apigateway.security.keycloak.service.KeyCloakRoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth/roles")
 @RequiredArgsConstructor
-public class KeycloakRoleApi {
+public class KeycloakRoleController {
     private final KeyCloakRoleService roleService;
 
     @PutMapping("/assign-role/{userId}")

@@ -1,5 +1,6 @@
-package com.techworld.apigateway.security.keycloak.users;
+package com.techworld.apigateway.security.keycloak.service;
 
+import com.techworld.apigateway.security.keycloak.model.UserRegistrationRecord;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -24,6 +25,7 @@ public class KeycloakUserServiceImpl implements KeycloakUserService {
 
     @Value("${keycloak.realm}")
     private String realm;
+
     private final Keycloak keycloak;
 
     private UsersResource getUsersResource() {
@@ -52,7 +54,7 @@ public class KeycloakUserServiceImpl implements KeycloakUserService {
 
         UsersResource usersResource = getUsersResource();
         Response response = usersResource.create(user);
-        log.info("response: " + response.getStatus());
+        log.info("response: {}", response.getStatus());
 
         return Objects.equals(HttpStatus.CREATED.value(), response.getStatus()) ? userRegistrationRecord : null;
     }

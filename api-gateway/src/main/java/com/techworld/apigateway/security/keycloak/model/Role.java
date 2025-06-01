@@ -1,4 +1,4 @@
-package com.techworld.apigateway.security.keycloak.roles;
+package com.techworld.apigateway.security.keycloak.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

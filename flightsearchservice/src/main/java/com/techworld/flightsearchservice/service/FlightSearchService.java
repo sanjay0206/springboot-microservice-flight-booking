@@ -7,6 +7,7 @@ import com.techworld.flightsearchservice.model.FlightSearchResponse;
 import java.util.List;
 
 public interface FlightSearchService {
+
     List<FlightSearchResponse> searchFlights(FlightSearchRequest flightSearchRequest);
 
     FlightSearchResponse indexFlight(Long flightId, FlightRequest flightRequest);

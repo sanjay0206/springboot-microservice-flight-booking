@@ -36,5 +36,4 @@ public class BookingController {
     public BookingResponse createHotelBooking(@RequestBody HotelBookingRequest hotelBookingRequest) {
         return hotelBookingService.createBooking(hotelBookingRequest);
     }
-
 }

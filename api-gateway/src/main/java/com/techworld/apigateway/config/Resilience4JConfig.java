@@ -17,5 +17,4 @@ public class Resilience4JConfig {
                         .circuitBreakerConfig(CircuitBreakerConfig.ofDefaults())
                         .build());
     }
-
 }

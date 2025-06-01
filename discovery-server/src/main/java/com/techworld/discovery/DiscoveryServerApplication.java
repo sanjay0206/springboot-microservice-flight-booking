@@ -12,5 +12,4 @@ public class DiscoveryServerApplication {
         SpringApplication.run(DiscoveryServerApplication.class, args);
         System.out.println("DiscoveryServerApplication is running...");
     }
-
 }

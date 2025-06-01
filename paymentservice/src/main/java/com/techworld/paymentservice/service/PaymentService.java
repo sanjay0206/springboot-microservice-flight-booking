@@ -8,5 +8,4 @@ public interface PaymentService {
     long processPayment(PaymentRequest paymentRequest);
 
     PaymentResponse getPaymentDetailsByBookingId(Long bookingId);
-
 }

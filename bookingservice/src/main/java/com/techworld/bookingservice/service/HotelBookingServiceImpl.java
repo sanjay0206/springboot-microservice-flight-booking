@@ -33,8 +33,8 @@ public class HotelBookingServiceImpl implements BookingService {
     @Override
     @Transactional(rollbackOn = SQLException.class)
     public HotelBookingResponse createBooking(BookingRequest bookingRequest) {
+        log.info("bookingRequest: {}", bookingRequest);
 
-        log.info("bookingRequest: " + bookingRequest);
         if (!(bookingRequest instanceof HotelBookingRequest)) {
             throw new IllegalArgumentException("Invalid booking type");
         }

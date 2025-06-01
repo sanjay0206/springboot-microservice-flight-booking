@@ -18,5 +18,4 @@ public class BookingGlobalExceptionHandler extends ResponseEntityExceptionHandle
                 .build(),
                 HttpStatus.valueOf(exception.getStatus()));
     }
-
 }

@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface FlightSearchRepository extends MongoRepository<Flight, Long> {
+
     List<Flight> findByOriginAndDestinationAndDepartureDateGreaterThanEqualAndAvailableSeatsGreaterThanEqual
             (String origin, String destination, LocalDate date, int passengers);
 }
